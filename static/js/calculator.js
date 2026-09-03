@@ -1,0 +1,127 @@
+const Calculator = (() => {
+  let currentTariff = null;
+
+  function fmt(value) {
+    return Number(value).toLocaleString("en-EG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function setTotal(total) {
+    document.getElementById("total-number").textContent = fmt(total);
+  }
+
+  function renderBreakdown(result) {
+    const el = document.getElementById("breakdown");
+    el.innerHTML = "";
+
+    const rows = [
+      [t("row_energy_charge", "Energy charge"), result.energy_charge, ""],
+      [t("row_service_fee", "Customer service fee"), result.customer_service_fee, ""],
+      [t("row_transition", "Transition deduction"), result.transition_deduction, "fee"],
+      [t("row_other_fees", "Other fees"), result.other_fees, "fee"],
+      [t("row_unread_fee", "Unread meter fee"), result.unread_meter_fee, "fee"],
+    ];
+
+    rows.forEach(([label, value, cls]) => {
+      if (Number(value) === 0 && cls === "fee") return;
+      const row = document.createElement("div");
+      row.className = `breakdown-row ${cls}`;
+      row.innerHTML = `<span class="label">${label}</span><span class="value">${fmt(value)} EGP</span>`;
+      el.appendChild(row);
+    });
+
+    const totalRow = document.createElement("div");
+    totalRow.className = "breakdown-row total";
+    totalRow.innerHTML = `<span class="label">${t("row_total", "Total")}</span><span class="value">${fmt(result.total)} EGP</span>`;
+    el.appendChild(totalRow);
+
+    const linesWrap = document.createElement("div");
+    linesWrap.className = "energy-lines";
+    result.details.energy_breakdown.forEach((line) => {
+      const l = document.createElement("div");
+      l.className = "line";
+      l.innerHTML = `<span>Slice ${line.slice_order} · ${line.kwh} kWh @ ${line.rate_egp}</span><span>${fmt(line.charge)} EGP</span>`;
+      linesWrap.appendChild(l);
+    });
+    if (result.details.transition_breakdown.length) {
+      result.details.transition_breakdown.forEach((t) => {
+        const l = document.createElement("div");
+        l.className = "line";
+        l.innerHTML = `<span>${t.note || "Transition surcharge"}</span><span>${fmt(t.deduction_amount)} EGP</span>`;
+        linesWrap.appendChild(l);
+      });
+    }
+    el.appendChild(linesWrap);
+  }
+
+  async function loadTariff() {
+    currentTariff = await Api.getTariff();
+    Ladder.render(
+      document.getElementById("ladder"),
+      document.getElementById("ladder-labels"),
+      currentTariff.slices,
+      0
+    );
+  }
+
+  async function runCalculation() {
+    const consumptionInput = document.getElementById("consumption-input");
+    const consumption = parseFloat(consumptionInput.value);
+    const errorEl = document.getElementById("calc-error");
+    const statusEl = document.getElementById("calc-status");
+    errorEl.textContent = "";
+    statusEl.textContent = "";
+
+    if (isNaN(consumption) || consumption < 0) {
+      errorEl.textContent = t("error_invalid_consumption", "Enter a valid, non-negative consumption in kWh.");
+      return;
+    }
+
+    const unreadMeter = document.getElementById("unread-meter-check").checked;
+    const shouldSave = document.getElementById("save-bill-check").checked;
+    const billingMonth = document.getElementById("billing-month-input").value;
+
+    if (shouldSave && !billingMonth) {
+      errorEl.textContent = t("error_billing_month_required", "Pick a billing month to save this bill.");
+      return;
+    }
+
+    try {
+      const payload = { consumption_kwh: consumption, unread_meter: unreadMeter };
+      if (shouldSave) {
+        payload.save = true;
+        payload.billing_month = billingMonth;
+      }
+      const result = await Api.calculate(payload);
+      setTotal(result.total);
+      renderBreakdown(result);
+      Ladder.render(
+        document.getElementById("ladder"),
+        document.getElementById("ladder-labels"),
+        currentTariff.slices,
+        consumption
+      );
+      if (shouldSave) {
+        statusEl.textContent = t("bill_saved", "Bill saved.");
+      }
+    } catch (err) {
+      errorEl.textContent = err.message;
+    }
+  }
+
+  function bindEvents() {
+    document.getElementById("calculate-btn").addEventListener("click", runCalculation);
+    document.getElementById("consumption-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") runCalculation();
+    });
+    document.getElementById("save-bill-check").addEventListener("change", (e) => {
+      document.getElementById("billing-month-field").style.display = e.target.checked ? "block" : "none";
+    });
+  }
+
+  async function init() {
+    bindEvents();
+    await loadTariff();
+  }
+
+  return { init, reloadTariff: loadTariff };
+})();

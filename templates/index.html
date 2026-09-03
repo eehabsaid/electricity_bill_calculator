@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electricity Bill Calculator</title>
+  <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="title-block">
+        <div>
+          <h1 data-i18n="app_title">Electricity Bill Calculator</h1>
+          <div class="sub" data-i18n="app_subtitle">progressive tariff · configurable slices</div>
+        </div>
+      </div>
+      <div class="header-controls">
+        <select id="lang-select" aria-label="Language"></select>
+        <button id="theme-toggle" title="Toggle theme">🌙</button>
+        <nav class="view-switch">
+          <button data-view="view-calculate" class="active" data-i18n="nav_calculate">Calculate</button>
+          <button data-view="view-settings" data-i18n="nav_settings">Tariff settings</button>
+        </nav>
+      </div>
+    </header>
+
+    <section id="view-calculate" class="view active">
+      <div class="hero">
+        <div class="total-line">
+          <span class="total-number" id="total-number">0.00</span>
+          <span class="total-currency" data-i18n="total_currency">EGP total</span>
+        </div>
+        <div class="ladder" id="ladder"></div>
+        <div class="ladder-labels" id="ladder-labels"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h2 data-i18n="new_reading">New reading</h2>
+          <div class="field">
+            <label for="consumption-input" data-i18n="consumption_label">Consumption (kWh)</label>
+            <input type="number" id="consumption-input" min="0" step="0.01"
+                   data-i18n-placeholder="consumption_placeholder" placeholder="e.g. 250" autofocus>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="unread-meter-check">
+            <label for="unread-meter-check" style="margin:0;" data-i18n="unread_meter_label">Meter could not be read this cycle</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="save-bill-check">
+            <label for="save-bill-check" style="margin:0;" data-i18n="save_bill_label">Save this bill</label>
+          </div>
+          <div class="field" id="billing-month-field" style="display:none;">
+            <label for="billing-month-input" data-i18n="billing_month_label">Billing month</label>
+            <input type="date" id="billing-month-input">
+          </div>
+          <button class="primary" id="calculate-btn" data-i18n="calculate_btn">Calculate</button>
+          <div class="error-msg" id="calc-error"></div>
+          <div class="status-msg" id="calc-status"></div>
+        </div>
+
+        <div class="panel">
+          <h2 data-i18n="breakdown_title">Breakdown</h2>
+          <div id="breakdown">
+            <div class="notice" data-i18n="breakdown_empty">Enter a consumption reading to see the breakdown.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-settings" class="view">
+      <div class="panel">
+        <h2 data-i18n="tariff_section_title">Tariff</h2>
+        <div class="strategy-row">
+          <div class="field">
+            <label for="tariff-name" data-i18n="tariff_name_label">Name</label>
+            <input type="text" id="tariff-name">
+          </div>
+          <div class="field">
+            <label for="unread-fee-input" data-i18n="unread_fee_label">Unread meter fee (EGP)</label>
+            <input type="number" id="unread-fee-input" step="0.01">
+          </div>
+        </div>
+        <button class="ghost" id="save-meta-btn" data-i18n="save_tariff_btn">Save tariff settings</button>
+        <span class="status-msg" id="meta-status"></span>
+
+        <div class="section-gap">
+          <h2 data-i18n="slices_title">Slices</h2>
+          <table class="slices">
+            <thead>
+              <tr>
+                <th data-i18n="col_order">#</th>
+                <th data-i18n="col_min">Min kWh</th>
+                <th data-i18n="col_max">Max kWh</th>
+                <th data-i18n="col_rate">Rate (piastres/kWh)</th>
+                <th data-i18n="col_fee">Service fee (EGP)</th>
+                <th data-i18n="col_mode">Billing mode</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="slices-body"></tbody>
+          </table>
+          <div class="table-actions">
+            <button class="ghost" id="add-slice-btn" data-i18n="add_slice_btn">+ Add slice</button>
+            <span class="error-msg" id="slices-status"></span>
+          </div>
+          <p class="notice" data-i18n="slices_notice">Min kWh is derived automatically from the previous slice's max, so every slice stays contiguous.</p>
+        </div>
+
+        <div class="section-gap">
+          <h2 data-i18n="transition_title">Progressive-consumption transition rules</h2>
+          <p class="notice" data-i18n="transition_notice">Extra deductions applied the moment a reading crosses into a slice.</p>
+          <div id="transition-rules"></div>
+        </div>
+
+        <div class="section-gap">
+          <h2 data-i18n="fees_title">Extra fees</h2>
+          <p class="notice" data-i18n="fees_notice">Any additional charges beyond the slice rate and service fee.</p>
+          <div id="fees"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/i18n.js' %}"></script>
+  <script src="{% static 'js/api.js' %}"></script>
+  <script src="{% static 'js/ladder.js' %}"></script>
+  <script src="{% static 'js/calculator.js' %}"></script>
+  <script src="{% static 'js/settings.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

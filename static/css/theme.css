@@ -1,0 +1,56 @@
+/* Theme tokens matching WealthFlow's dark-blue / light system. */
+
+[data-theme="dark"],
+:root:not([data-theme="light"]) {
+  --bg-primary: #0a0f1e;
+  --bg-secondary: #0d1530;
+  --bg-tertiary: #111d3d;
+  --bg-card: rgb(13 21 48 / 78%);
+  --bg-card-hover: #16264f;
+
+  --border-color: #1e3a6e;
+  --border-strong: #2d56a3;
+
+  --accent-primary: #1a6ef5;
+  --accent-hover: #2d7fff;
+  --accent-light: rgb(26 110 245 / 16%);
+
+  --accent-amber: #ffd166;
+  --accent-amber-light: rgb(255 209 102 / 14%);
+
+  --accent-rose: #ff4d6d;
+
+  --text-primary: #e8f0fe;
+  --text-secondary: #7b93c9;
+  --text-muted: #4a6399;
+
+  --shadow-card: 0 10px 30px -8px rgb(0 0 0 / 40%);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #fff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #fff;
+  --bg-card-hover: #f8fafc;
+
+  --border-color: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  --accent-primary: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-light: rgb(79 70 229 / 8%);
+
+  --accent-amber: #d97706;
+  --accent-amber-light: rgb(217 119 6 / 8%);
+
+  --accent-rose: #e11d48;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --shadow-card: 0 4px 20px -2px rgb(15 23 42 / 5%);
+  color-scheme: light;
+}
