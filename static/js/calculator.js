@@ -65,18 +65,27 @@ const Calculator = (() => {
 
   async function runCalculation() {
     const consumptionInput = document.getElementById("consumption-input");
-    const consumption = parseFloat(consumptionInput.value);
+    const rawValue = consumptionInput.value.trim();
+    const unreadMeter = document.getElementById("unread-meter-check").checked;
     const errorEl = document.getElementById("calc-error");
     const statusEl = document.getElementById("calc-status");
     errorEl.textContent = "";
     statusEl.textContent = "";
 
-    if (isNaN(consumption) || consumption < 0) {
+    // Blank consumption is only acceptable when the meter couldn't be read -
+    // the bill then defaults to just the unread-meter fee (0 kWh energy charge).
+    let consumption = null;
+    if (rawValue !== "") {
+      consumption = parseFloat(rawValue);
+      if (isNaN(consumption) || consumption < 0) {
+        errorEl.textContent = t("error_invalid_consumption", "Enter a valid, non-negative consumption in kWh.");
+        return;
+      }
+    } else if (!unreadMeter) {
       errorEl.textContent = t("error_invalid_consumption", "Enter a valid, non-negative consumption in kWh.");
       return;
     }
 
-    const unreadMeter = document.getElementById("unread-meter-check").checked;
     const shouldSave = document.getElementById("save-bill-check").checked;
     const billingMonth = document.getElementById("billing-month-input").value;
 
@@ -86,7 +95,8 @@ const Calculator = (() => {
     }
 
     try {
-      const payload = { consumption_kwh: consumption, unread_meter: unreadMeter };
+      const payload = { unread_meter: unreadMeter };
+      if (consumption !== null) payload.consumption_kwh = consumption;
       if (shouldSave) {
         payload.save = true;
         payload.billing_month = billingMonth;
@@ -98,7 +108,7 @@ const Calculator = (() => {
         document.getElementById("ladder"),
         document.getElementById("ladder-labels"),
         currentTariff.slices,
-        consumption
+        consumption !== null ? consumption : 0
       );
       if (shouldSave) {
         statusEl.textContent = t("bill_saved", "Bill saved.");

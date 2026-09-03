@@ -33,7 +33,7 @@ def tariff_detail_view(request):
     if payload is None:
         return bad_request("Invalid JSON body.")
 
-    for field in ("name", "version", "description", "calculation_strategy"):
+    for field in ("name", "version", "description"):
         if field in payload:
             setattr(tariff, field, payload[field])
     if "unread_meter_fee" in payload:
@@ -41,10 +41,6 @@ def tariff_detail_view(request):
             tariff.unread_meter_fee = payload["unread_meter_fee"]
         except (TypeError, ValueError):
             return bad_request("'unread_meter_fee' must be a number.")
-
-    valid_strategies = dict(Tariff.CALCULATION_STRATEGY_CHOICES)
-    if tariff.calculation_strategy not in valid_strategies:
-        return bad_request(f"'calculation_strategy' must be one of {list(valid_strategies)}.")
 
     tariff.save()
     return JsonResponse(tariff.to_dict())
