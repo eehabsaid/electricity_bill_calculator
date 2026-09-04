@@ -58,5 +58,7 @@
   "history_title": "Saved bills",
   "history_notice": "Bills saved from the Calculate tab appear here.",
   "history_empty": "No saved bills yet.",
-  "history_delete": "Delete"
+  "history_delete": "Delete",
+  "history_col_date": "Bill date",
+  "history_col_consumption": "Consumption"
 }

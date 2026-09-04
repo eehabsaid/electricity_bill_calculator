@@ -58,5 +58,7 @@
   "history_title": "الفواتير المحفوظة",
   "history_notice": "تظهر هنا الفواتير التي تحفظها من تبويب الحساب.",
   "history_empty": "لا توجد فواتير محفوظة بعد.",
-  "history_delete": "حذف"
+  "history_delete": "حذف",
+  "history_col_date": "تاريخ الفاتورة",
+  "history_col_consumption": "الاستهلاك"
 }

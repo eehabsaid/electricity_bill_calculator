@@ -58,5 +58,7 @@
   "history_title": "Factures enregistrées",
   "history_notice": "Les factures enregistrées depuis l'onglet Calculer apparaissent ici.",
   "history_empty": "Aucune facture enregistrée pour le moment.",
-  "history_delete": "Supprimer"
+  "history_delete": "Supprimer",
+  "history_col_date": "Date de facture",
+  "history_col_consumption": "Consommation"
 }

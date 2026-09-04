@@ -58,5 +58,7 @@
   "history_title": "Gespeicherte Rechnungen",
   "history_notice": "Im Tab Berechnen gespeicherte Rechnungen erscheinen hier.",
   "history_empty": "Noch keine gespeicherten Rechnungen.",
-  "history_delete": "Löschen"
+  "history_delete": "Löschen",
+  "history_col_date": "Rechnungsdatum",
+  "history_col_consumption": "Verbrauch"
 }
