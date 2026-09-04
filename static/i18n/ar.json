@@ -53,5 +53,10 @@
   "error_invalid_consumption": "أدخل قيمة استهلاك صحيحة وغير سالبة بالكيلووات/ساعة.",
   "error_billing_month_required": "اختر شهر الفاتورة لحفظها.",
   "min_one_slice": "يجب أن تحتوي التعريفة على شريحة واحدة على الأقل.",
-  "slice_option_label": "الشريحة {order}"
+  "slice_option_label": "الشريحة {order}",
+  "nav_history": "سجل الفواتير",
+  "history_title": "الفواتير المحفوظة",
+  "history_notice": "تظهر هنا الفواتير التي تحفظها من تبويب الحساب.",
+  "history_empty": "لا توجد فواتير محفوظة بعد.",
+  "history_delete": "حذف"
 }

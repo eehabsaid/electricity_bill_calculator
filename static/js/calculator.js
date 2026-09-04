@@ -112,6 +112,7 @@ const Calculator = (() => {
       );
       if (shouldSave) {
         statusEl.textContent = t("bill_saved", "Bill saved.");
+        document.dispatchEvent(new CustomEvent("billSaved"));
       }
     } catch (err) {
       errorEl.textContent = err.message;

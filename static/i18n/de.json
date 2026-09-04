@@ -53,5 +53,10 @@
   "error_invalid_consumption": "Geben Sie einen gültigen, nicht negativen Verbrauch in kWh ein.",
   "error_billing_month_required": "Wählen Sie einen Abrechnungsmonat, um diese Rechnung zu speichern.",
   "min_one_slice": "Ein Tarif benötigt mindestens eine Stufe.",
-  "slice_option_label": "Stufe {order}"
+  "slice_option_label": "Stufe {order}",
+  "nav_history": "Rechnungsverlauf",
+  "history_title": "Gespeicherte Rechnungen",
+  "history_notice": "Im Tab Berechnen gespeicherte Rechnungen erscheinen hier.",
+  "history_empty": "Noch keine gespeicherten Rechnungen.",
+  "history_delete": "Löschen"
 }

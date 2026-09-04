@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
       views.forEach((v) => v.classList.remove("active"));
       btn.classList.add("active");
       document.getElementById(btn.dataset.view).classList.add("active");
+      if (btn.dataset.view === "view-history") {
+        History.refresh();
+      }
     });
   });
 
@@ -15,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Calculator.init();
   Settings.init();
+  History.init();
 
   document.addEventListener("languageChanged", () => {
     Settings.refresh();

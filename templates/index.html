@@ -23,6 +23,7 @@
         <nav class="view-switch">
           <button data-view="view-calculate" class="active" data-i18n="nav_calculate">Calculate</button>
           <button data-view="view-settings" data-i18n="nav_settings">Tariff settings</button>
+          <button data-view="view-history" data-i18n="nav_history">Bill history</button>
         </nav>
       </div>
     </header>
@@ -123,6 +124,17 @@
         </div>
       </div>
     </section>
+
+    <section id="view-history" class="view">
+      <div class="panel">
+        <div class="history-header">
+          <h2 data-i18n="history_title">Saved bills</h2>
+          <span class="notice" data-i18n="history_notice">Bills saved from the Calculate tab appear here.</span>
+        </div>
+        <div id="history-list"></div>
+        <div class="notice" id="history-empty" data-i18n="history_empty" style="display:none;">No saved bills yet.</div>
+      </div>
+    </section>
   </div>
 
   <script src="{% static 'js/theme.js' %}"></script>
@@ -131,6 +143,7 @@
   <script src="{% static 'js/ladder.js' %}"></script>
   <script src="{% static 'js/calculator.js' %}"></script>
   <script src="{% static 'js/settings.js' %}"></script>
+  <script src="{% static 'js/history.js' %}"></script>
   <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>

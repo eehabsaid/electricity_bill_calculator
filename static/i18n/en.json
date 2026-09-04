@@ -53,5 +53,10 @@
   "error_invalid_consumption": "Enter a valid, non-negative consumption in kWh.",
   "error_billing_month_required": "Pick a billing month to save this bill.",
   "min_one_slice": "A tariff needs at least one slice.",
-  "slice_option_label": "Slice {order}"
+  "slice_option_label": "Slice {order}",
+  "nav_history": "Bill history",
+  "history_title": "Saved bills",
+  "history_notice": "Bills saved from the Calculate tab appear here.",
+  "history_empty": "No saved bills yet.",
+  "history_delete": "Delete"
 }

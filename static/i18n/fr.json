@@ -53,5 +53,10 @@
   "error_invalid_consumption": "Entrez une consommation valide et non négative en kWh.",
   "error_billing_month_required": "Choisissez un mois de facturation pour enregistrer cette facture.",
   "min_one_slice": "Un tarif doit comporter au moins une tranche.",
-  "slice_option_label": "Tranche {order}"
+  "slice_option_label": "Tranche {order}",
+  "nav_history": "Historique des factures",
+  "history_title": "Factures enregistrées",
+  "history_notice": "Les factures enregistrées depuis l'onglet Calculer apparaissent ici.",
+  "history_empty": "Aucune facture enregistrée pour le moment.",
+  "history_delete": "Supprimer"
 }
