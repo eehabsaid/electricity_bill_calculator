@@ -60,5 +60,9 @@
   "history_empty": "Aucune facture enregistrée pour le moment.",
   "history_delete": "Supprimer",
   "history_col_date": "Date de facture",
-  "history_col_consumption": "Consommation"
+  "history_col_consumption": "Consommation",
+  "service_fee_mode_label": "Mode des frais de service",
+  "service_fee_mode_current": "Tranche actuelle uniquement (postpayé)",
+  "service_fee_mode_cumulative": "Cumulatif sur toutes les tranches (compteur prépayé abu kart)",
+  "service_fee_slice_line": "Frais de service de la tranche {order}"
 }

@@ -42,11 +42,19 @@ const Calculator = (() => {
       l.innerHTML = `<span>Slice ${line.slice_order} · ${line.kwh} kWh @ ${line.rate_egp}</span><span>${fmt(line.charge)} EGP</span>`;
       linesWrap.appendChild(l);
     });
-    if (result.details.transition_breakdown.length) {
-      result.details.transition_breakdown.forEach((t) => {
+    if (result.details.service_fee_breakdown && result.details.service_fee_breakdown.length > 1) {
+      result.details.service_fee_breakdown.forEach((line) => {
         const l = document.createElement("div");
         l.className = "line";
-        l.innerHTML = `<span>${t.note || "Transition surcharge"}</span><span>${fmt(t.deduction_amount)} EGP</span>`;
+        l.innerHTML = `<span>${t("service_fee_slice_line", "Slice {order} service fee").replace("{order}", line.slice_order)}</span><span>${fmt(line.fee)} EGP</span>`;
+        linesWrap.appendChild(l);
+      });
+    }
+    if (result.details.transition_breakdown.length) {
+      result.details.transition_breakdown.forEach((rule) => {
+        const l = document.createElement("div");
+        l.className = "line";
+        l.innerHTML = `<span>${rule.note || "Transition surcharge"}</span><span>${fmt(rule.deduction_amount)} EGP</span>`;
         linesWrap.appendChild(l);
       });
     }

@@ -20,6 +20,7 @@ const Settings = (() => {
   function renderMeta() {
     document.getElementById("tariff-name").value = tariff.name;
     document.getElementById("unread-fee-input").value = tariff.unread_meter_fee;
+    document.getElementById("service-fee-mode-select").value = tariff.service_fee_mode;
   }
 
   async function saveMeta() {
@@ -28,6 +29,7 @@ const Settings = (() => {
       await Api.updateTariff({
         name: document.getElementById("tariff-name").value,
         unread_meter_fee: document.getElementById("unread-fee-input").value,
+        service_fee_mode: document.getElementById("service-fee-mode-select").value,
       });
       statusEl.textContent = t("saved_status", "Saved.");
       await refresh();

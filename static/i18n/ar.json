@@ -60,5 +60,9 @@
   "history_empty": "لا توجد فواتير محفوظة بعد.",
   "history_delete": "حذف",
   "history_col_date": "تاريخ الفاتورة",
-  "history_col_consumption": "الاستهلاك"
+  "history_col_consumption": "الاستهلاك",
+  "service_fee_mode_label": "طريقة احتساب رسوم الخدمة",
+  "service_fee_mode_current": "الشريحة الحالية فقط (فوترة لاحقة)",
+  "service_fee_mode_cumulative": "تراكمية عبر كل الشرائح (عداد أبو كارت مسبق الدفع)",
+  "service_fee_slice_line": "رسوم خدمة الشريحة {order}"
 }

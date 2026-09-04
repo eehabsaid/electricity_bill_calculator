@@ -6,10 +6,11 @@ from core.models import Tariff, TariffSlice, TransitionRule
 from core.services.calculator import TariffCalculationError, TariffCalculator
 
 
-def make_seeded_tariff():
+def make_seeded_tariff(service_fee_mode=Tariff.SERVICE_FEE_CURRENT_SLICE):
     """Mirrors seed_tariff: slices 1-6 progressive, slice 7 flat on total consumption -
     the verified real structure (Ministry of Electricity / EgyptERA reporting)."""
-    tariff = Tariff.objects.create(name="Test Tariff", unread_meter_fee=Decimal("30.00"))
+    tariff = Tariff.objects.create(name="Test Tariff", unread_meter_fee=Decimal("30.00"),
+                                    service_fee_mode=service_fee_mode)
     data = [
         (1, "0", "50", "68", "3", TariffSlice.MODE_MARGINAL),
         (2, "50.01", "100", "98", "6", TariffSlice.MODE_MARGINAL),
@@ -28,6 +29,35 @@ def make_seeded_tariff():
             billing_mode=mode,
         )
     return tariff, slices
+
+
+class ServiceFeeModeTests(TestCase):
+    """Postpaid bills show one fee for the slice reached; prepaid ('abu كارت')
+    meters deduct a fee at every slice crossing, so those accumulate."""
+
+    def test_current_slice_only_is_the_default(self):
+        tariff, _ = make_seeded_tariff()  # default mode
+        result = TariffCalculator(tariff).calculate(500)
+        # 500 kWh lands in slice 5 - only slice 5's fee (50) applies.
+        self.assertEqual(result.customer_service_fee, Decimal("50.00"))
+
+    def test_cumulative_mode_sums_every_slice_up_to_current(self):
+        tariff, _ = make_seeded_tariff(service_fee_mode=Tariff.SERVICE_FEE_CUMULATIVE)
+        result = TariffCalculator(tariff).calculate(500)
+        # 500 kWh lands in slice 5: 3 + 6 + 12 + 20 + 50 = 91.
+        self.assertEqual(result.customer_service_fee, Decimal("91.00"))
+        self.assertEqual(len(result.details["service_fee_breakdown"]), 5)
+
+    def test_cumulative_mode_slice_1_only_charges_slice_1(self):
+        tariff, _ = make_seeded_tariff(service_fee_mode=Tariff.SERVICE_FEE_CUMULATIVE)
+        result = TariffCalculator(tariff).calculate(30)
+        self.assertEqual(result.customer_service_fee, Decimal("3.00"))
+
+    def test_cumulative_mode_slice_7_sums_all_seven(self):
+        tariff, _ = make_seeded_tariff(service_fee_mode=Tariff.SERVICE_FEE_CUMULATIVE)
+        result = TariffCalculator(tariff).calculate(1200)
+        # 3 + 6 + 12 + 20 + 50 + 60 + 100 = 251
+        self.assertEqual(result.customer_service_fee, Decimal("251.00"))
 
 
 class MarginalCalculationTests(TestCase):

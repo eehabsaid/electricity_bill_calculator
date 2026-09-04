@@ -41,6 +41,11 @@ def tariff_detail_view(request):
             tariff.unread_meter_fee = payload["unread_meter_fee"]
         except (TypeError, ValueError):
             return bad_request("'unread_meter_fee' must be a number.")
+    if "service_fee_mode" in payload:
+        valid_modes = dict(Tariff.SERVICE_FEE_MODE_CHOICES)
+        if payload["service_fee_mode"] not in valid_modes:
+            return bad_request(f"'service_fee_mode' must be one of {list(valid_modes)}.")
+        tariff.service_fee_mode = payload["service_fee_mode"]
 
     tariff.save()
     return JsonResponse(tariff.to_dict())

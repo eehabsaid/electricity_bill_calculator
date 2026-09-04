@@ -16,10 +16,26 @@ from django.db import models
 class Tariff(models.Model):
     """A named, versioned set of pricing rules. Exactly one is ever active."""
 
+    SERVICE_FEE_CURRENT_SLICE = "current_slice"
+    SERVICE_FEE_CUMULATIVE = "cumulative"
+    SERVICE_FEE_MODE_CHOICES = [
+        (SERVICE_FEE_CURRENT_SLICE, "Current slice only - one fee, from the slice reached"),
+        (SERVICE_FEE_CUMULATIVE, "Cumulative - sum of every slice's fee up to and including the current one"),
+    ]
+
     name = models.CharField(max_length=100, default="Egyptian Residential Tariff")
     version = models.CharField(max_length=50, default="1.0")
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
+    service_fee_mode = models.CharField(
+        max_length=20, choices=SERVICE_FEE_MODE_CHOICES, default=SERVICE_FEE_CURRENT_SLICE,
+        help_text=(
+            "How the customer service fee is totaled. Postpaid monthly bills "
+            "typically show a single fee for the slice reached. Prepaid "
+            "('abu كارت') meters deduct a fee at EVERY slice crossing in "
+            "real time, so those fees accumulate as consumption climbs."
+        ),
+    )
     unread_meter_fee = models.DecimalField(
         max_digits=12, decimal_places=2, default=Decimal("0.00"),
         validators=[MinValueValidator(Decimal("0.00"))],
@@ -53,6 +69,7 @@ class Tariff(models.Model):
             "version": self.version,
             "description": self.description,
             "is_active": self.is_active,
+            "service_fee_mode": self.service_fee_mode,
             "unread_meter_fee": str(self.unread_meter_fee),
             "slices": [s.to_dict() for s in self.slices.order_by("order")],
             "transition_rules": [r.to_dict() for r in self.transition_rules.order_by("order")],

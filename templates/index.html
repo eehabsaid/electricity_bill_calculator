@@ -84,6 +84,13 @@
             <label for="unread-fee-input" data-i18n="unread_fee_label">Unread meter fee (EGP)</label>
             <input type="number" id="unread-fee-input" step="0.01">
           </div>
+          <div class="field">
+            <label for="service-fee-mode-select" data-i18n="service_fee_mode_label">Service fee mode</label>
+            <select id="service-fee-mode-select">
+              <option value="current_slice" data-i18n="service_fee_mode_current">Current slice only (postpaid)</option>
+              <option value="cumulative" data-i18n="service_fee_mode_cumulative">Cumulative across all slices (prepaid abu kart)</option>
+            </select>
+          </div>
         </div>
         <button class="ghost" id="save-meta-btn" data-i18n="save_tariff_btn">Save tariff settings</button>
         <span class="status-msg" id="meta-status"></span>

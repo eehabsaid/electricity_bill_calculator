@@ -60,5 +60,9 @@
   "history_empty": "Noch keine gespeicherten Rechnungen.",
   "history_delete": "Löschen",
   "history_col_date": "Rechnungsdatum",
-  "history_col_consumption": "Verbrauch"
+  "history_col_consumption": "Verbrauch",
+  "service_fee_mode_label": "Servicegebühr-Modus",
+  "service_fee_mode_current": "Nur aktuelle Stufe (Postpaid)",
+  "service_fee_mode_cumulative": "Kumulativ über alle Stufen (Prepaid-Zähler abu kart)",
+  "service_fee_slice_line": "Servicegebühr Stufe {order}"
 }

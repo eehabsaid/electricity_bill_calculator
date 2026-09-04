@@ -154,6 +154,26 @@ class TariffCalculator:
                 applied.append({"note": rule["note"], "deduction_amount": str(amount)})
         return _q(total), applied
 
+    def _service_fee(self, current_slice: dict):
+        """Postpaid bills typically show one fee for the slice reached.
+        Prepaid ('abu كارت') meters deduct a fee at EVERY slice crossing in
+        real time as the balance depletes, so those fees accumulate across
+        every slice from 1 up to and including the current one. Which
+        applies is a per-tariff setting (service_fee_mode), not hardcoded."""
+        if self.tariff.service_fee_mode == Tariff.SERVICE_FEE_CUMULATIVE:
+            breakdown = []
+            total = Decimal("0")
+            for s in self.slices:
+                if s["order"] > current_slice["order"]:
+                    break
+                fee = Decimal(str(s["customer_service_fee"]))
+                total += fee
+                breakdown.append({"slice_order": s["order"], "fee": str(_q(fee))})
+            return _q(total), breakdown
+
+        fee = _q(Decimal(str(current_slice["customer_service_fee"])))
+        return fee, [{"slice_order": current_slice["order"], "fee": str(fee)}]
+
     def calculate(self, consumption, unread_meter: bool = False,
                   additional_fees: Optional[List[dict]] = None) -> CalculationResult:
         consumption = Decimal(str(consumption))
@@ -162,7 +182,7 @@ class TariffCalculator:
 
         current_slice = self._find_slice(consumption)
         energy_charge, energy_breakdown = self._energy_charge(consumption, current_slice)
-        service_fee = _q(Decimal(str(current_slice["customer_service_fee"])))
+        service_fee, service_fee_breakdown = self._service_fee(current_slice)
         transition_deduction, transition_breakdown = self._transition_deduction(current_slice)
 
         other_fees = Decimal("0")
@@ -187,7 +207,9 @@ class TariffCalculator:
             "tariff_version": self.tariff.version,
             "applied_slice_order": current_slice["order"],
             "applied_billing_mode": current_slice["billing_mode"],
+            "service_fee_mode": self.tariff.service_fee_mode,
             "energy_breakdown": energy_breakdown,
+            "service_fee_breakdown": service_fee_breakdown,
             "transition_breakdown": transition_breakdown,
             "fees_breakdown": fee_breakdown,
         }

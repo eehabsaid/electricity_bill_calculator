@@ -62,9 +62,11 @@ class Command(BaseCommand):
             description=(
                 "Seeded from published August 2026 residential rates. Slices 1-6 are "
                 "progressive; slice 7 is flat on total consumption once reached, per "
-                "Ministry of Electricity / EgyptERA reporting. Fully editable."
+                "Ministry of Electricity / EgyptERA reporting. Service fee mode set to "
+                "cumulative to match prepaid ('abu كارت') meter behavior. Fully editable."
             ),
             is_active=True,
+            service_fee_mode=Tariff.SERVICE_FEE_CUMULATIVE,
             unread_meter_fee=Decimal("30.00"),
         )
 

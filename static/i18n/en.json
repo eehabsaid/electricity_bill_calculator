@@ -60,5 +60,9 @@
   "history_empty": "No saved bills yet.",
   "history_delete": "Delete",
   "history_col_date": "Bill date",
-  "history_col_consumption": "Consumption"
+  "history_col_consumption": "Consumption",
+  "service_fee_mode_label": "Service fee mode",
+  "service_fee_mode_current": "Current slice only (postpaid)",
+  "service_fee_mode_cumulative": "Cumulative across all slices (prepaid abu kart)",
+  "service_fee_slice_line": "Slice {order} service fee"
 }
