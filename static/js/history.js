@@ -3,11 +3,7 @@
 const History = (() => {
   let requestId = 0;
 
-  function fmt(value) {
-    return Number(value).toLocaleString("en-EG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
-  const LOCALE_MAP = { en: "en-US", ar: "ar-EG", fr: "fr-FR", de: "de-DE" };
+  const LOCALE_MAP = { en: "en-US", ar: "ar-EG-u-nu-arab", fr: "fr-FR", de: "de-DE" };
 
   function formatDate(isoDate) {
     const d = new Date(isoDate + "T00:00:00");

@@ -203,7 +203,7 @@ const Settings = (() => {
           await refresh();
         });
 
-        const label = el("span", null, t("entering_slice", "Entering slice {order}").replace("{order}", rule.triggering_slice_order));
+        const label = el("span", null, t("entering_slice", "Entering slice {order}").replace("{order}", fmtInt(rule.triggering_slice_order)));
         label.style.flex = "1";
         label.style.fontSize = "0.85rem";
         label.style.color = "var(--text-dim)";
@@ -239,7 +239,7 @@ const Settings = (() => {
     sorted.forEach((s) => {
       const opt = document.createElement("option");
       opt.value = s.id;
-      opt.textContent = t("slice_option_label", "Slice {order}").replace("{order}", s.order);
+      opt.textContent = t("slice_option_label", "Slice {order}").replace("{order}", fmtInt(s.order));
       sliceSelect.appendChild(opt);
     });
 

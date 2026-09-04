@@ -1,10 +1,6 @@
 const Calculator = (() => {
   let currentTariff = null;
 
-  function fmt(value) {
-    return Number(value).toLocaleString("en-EG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
   function setTotal(total) {
     document.getElementById("total-number").textContent = fmt(total);
   }
@@ -39,14 +35,14 @@ const Calculator = (() => {
     result.details.energy_breakdown.forEach((line) => {
       const l = document.createElement("div");
       l.className = "line";
-      l.innerHTML = `<span>Slice ${line.slice_order} · ${line.kwh} kWh @ ${line.rate_egp}</span><span>${fmt(line.charge)} EGP</span>`;
+      l.innerHTML = `<span>${t("slice_option_label", "Slice {order}").replace("{order}", fmtInt(line.slice_order))} · ${fmt(line.kwh)} kWh @ ${fmt(line.rate_egp)}</span><span>${fmt(line.charge)} EGP</span>`;
       linesWrap.appendChild(l);
     });
     if (result.details.service_fee_breakdown && result.details.service_fee_breakdown.length > 1) {
       result.details.service_fee_breakdown.forEach((line) => {
         const l = document.createElement("div");
         l.className = "line";
-        l.innerHTML = `<span>${t("service_fee_slice_line", "Slice {order} service fee").replace("{order}", line.slice_order)}</span><span>${fmt(line.fee)} EGP</span>`;
+        l.innerHTML = `<span>${t("service_fee_slice_line", "Slice {order} service fee").replace("{order}", fmtInt(line.slice_order))}</span><span>${fmt(line.fee)} EGP</span>`;
         linesWrap.appendChild(l);
       });
     }
@@ -127,6 +123,20 @@ const Calculator = (() => {
     }
   }
 
+  const DATE_LOCALE_MAP = { en: "en-US", ar: "ar-EG-u-nu-arab", fr: "fr-FR", de: "de-DE" };
+
+  function updateBillingMonthPreview() {
+    const input = document.getElementById("billing-month-input");
+    const preview = document.getElementById("billing-month-preview");
+    if (!input.value) {
+      preview.textContent = "";
+      return;
+    }
+    const d = new Date(input.value + "T00:00:00");
+    const locale = DATE_LOCALE_MAP[_lang] || "en-US";
+    preview.textContent = d.toLocaleDateString(locale, { year: "numeric", month: "long" });
+  }
+
   function bindEvents() {
     document.getElementById("calculate-btn").addEventListener("click", runCalculation);
     document.getElementById("consumption-input").addEventListener("keydown", (e) => {
@@ -135,6 +145,8 @@ const Calculator = (() => {
     document.getElementById("save-bill-check").addEventListener("change", (e) => {
       document.getElementById("billing-month-field").style.display = e.target.checked ? "block" : "none";
     });
+    document.getElementById("billing-month-input").addEventListener("change", updateBillingMonthPreview);
+    document.addEventListener("languageChanged", updateBillingMonthPreview);
   }
 
   async function init() {

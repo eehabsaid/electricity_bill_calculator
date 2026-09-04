@@ -57,6 +57,7 @@
           <div class="field" id="billing-month-field" style="display:none;">
             <label for="billing-month-input" data-i18n="billing_month_label">Billing month</label>
             <input type="date" id="billing-month-input">
+            <div class="notice" id="billing-month-preview"></div>
           </div>
           <button class="primary" id="calculate-btn" data-i18n="calculate_btn">Calculate</button>
           <div class="error-msg" id="calc-error"></div>
@@ -146,6 +147,7 @@
 
   <script src="{% static 'js/theme.js' %}"></script>
   <script src="{% static 'js/i18n.js' %}"></script>
+  <script src="{% static 'js/formatting.js' %}"></script>
   <script src="{% static 'js/api.js' %}"></script>
   <script src="{% static 'js/ladder.js' %}"></script>
   <script src="{% static 'js/calculator.js' %}"></script>
